@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+/* stylelint-disable import-notation */
+@import 'tailwindcss';
+
+@theme {
+    --font-sans:
+        'Noto Sans JP', 'Noto Sans CJK JP', 'Helvetica Neue', 'Helvetica',
+        'Arial', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
+        'Meiryo', ui-sans-serif, system-ui, sans-serif, 'Noto Color Emoji',
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+@layer base {
+    :root {
+        --background: oklch(100% 0 0deg);
+        --foreground: oklch(0% 0 0deg);
+        --primary: oklch(50% 0 210deg);
+
+        @media (prefers-color-scheme: dark) {
+            --background: oklch(0% 0 0deg);
+            --foreground: oklch(100% 0 0deg);
+            --primary: oklch(50% 0 210deg);
+
+            color-scheme: dark;
+        }
+    }
+
+    body {
+        @apply bg-(--background) font-sans text-(--foregorund) antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-bold;
+    }
+
+    h1 {
+        @apply mb-4 text-5xl;
+    }
+
+    h2 {
+        @apply my-3 text-4xl;
+    }
+}

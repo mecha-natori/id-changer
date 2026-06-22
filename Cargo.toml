@@ -1,0 +1,42 @@
+cargo-features = ["profile-rustflags", "trim-paths"]
+
+[build-dependencies.tauri-build]
+features = []
+version = "2"
+
+[dependencies]
+serde_json = "1"
+tauri-plugin-opener = "2"
+
+[dependencies.serde]
+features = ["derive"]
+version = "1"
+
+[dependencies.tauri]
+features = ["config-toml"]
+version = "2"
+
+[lib]
+crate-type = ["cdylib", "rlib", "staticlib"]
+name = "id_changer_lib"
+
+[package]
+authors = ["Sora Tonami <ms0503@outlook.com>"]
+description = "Change CAN ID of circuit made by Mechatronics Lab"
+edition = "2024"
+name = "id-changer"
+resolver = "3"
+version = "0.1.0"
+
+[profile.dev]
+incremental = true
+rustflags = ["-Zthreads=16"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+rustflags = ["-Cdebuginfo=0", "-Zthreads=16"]
+strip = true
+trim-paths = "all"

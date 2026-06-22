@@ -1,0 +1,32 @@
+"$schema" = "https://schema.tauri.app/config/2"
+identifier = "io.github.mecha-natori.id-changer"
+productName = "CircuitIdChanger"
+
+[[app.windows]]
+height = 600
+title = "基板IDチェンジャー"
+width = 800
+
+[build]
+beforeBuildCommand = "pnpm build"
+beforeDevCommand = "pnpm dev"
+devUrl = "http://localhost:1420"
+frontendDist = "dist"
+
+[bundle]
+active = true
+icon = [
+    "icons/128x128.png",
+    "icons/128x128@2x.png",
+    "icons/32x32.png",
+    "icons/icon.icns",
+    "icons/icon.ico"
+]
+targets = [
+    "app",
+    # "appimage", # AppImage bundler is broken on NixOS
+    "deb",
+    "dmg",
+    "msi",
+    "rpm"
+]

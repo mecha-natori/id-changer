@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tool.tsbuildinfo",
+        "types": [
+            "node"
+        ]
+    },
+    "extends": "./tsconfig.base.json",
+    "include": [
+        "oxfmt.config.ts",
+        "oxlint.config.ts",
+        "vite.config.ts"
+    ]
+}

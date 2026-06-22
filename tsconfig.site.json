@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "jsxImportSource": "hono/jsx",
+        "lib": [
+            "DOM",
+            "ESNext"
+        ],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "paths": {
+            "@/*": [
+                "./app/*"
+            ]
+        },
+        "skipLibCheck": true,
+        "target": "ESNext",
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.site.tsbuildinfo",
+        "types": [
+            "node",
+            "vite/client"
+        ]
+    },
+    "extends": "./tsconfig.base.json",
+    "include": [
+        "app/**/*.ts",
+        "app/**/*.tsx"
+    ]
+}
