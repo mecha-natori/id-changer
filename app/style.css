@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* stylelint-disable import-notation */
-@import 'tailwindcss';
+@import 'tailwindcss' source('../app');
 
 @theme {
     --font-sans:

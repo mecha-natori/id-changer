@@ -44,5 +44,14 @@ export default defineConfig({
                 'import/no-relative-parent-imports': 'off'
             }
         }
-    ]
+    ],
+    rules: {
+        'import/extensions': [
+            'error',
+            'never',
+            { ignorePackages: true, json: 'always' }
+        ],
+        // incompatible with hono/jsx (expected `htmlFor` but hono/jsx uses `for`)
+        'jsx-a11y/label-has-associated-control': 'off'
+    }
 });

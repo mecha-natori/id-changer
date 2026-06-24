@@ -1,0 +1,35 @@
+{
+    "$schema": "./boards.schema.json",
+    "boards": {
+        "endless-soju-party": {
+            "bank": {
+                "base": -1,
+                "length": -1
+            },
+            "chip": {
+                "family": "esp32",
+                "name": "ESP32C3"
+            }
+        },
+        "heilig-vater": {
+            "bank": {
+                "base": 135135232,
+                "length": 131072
+            },
+            "chip": {
+                "family": "stm32",
+                "name": "STM32F405RGT6"
+            }
+        },
+        "mecha-donald": {
+            "bank": {
+                "base": 134739968,
+                "length": 2048
+            },
+            "chip": {
+                "family": "stm32",
+                "name": "STM32F303ZDT6"
+            }
+        }
+    }
+}

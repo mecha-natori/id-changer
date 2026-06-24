@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "const": "https://json-schema.org/draft/2020-12/schema"
+        },
+        "boards": {
+            "additionalProperties": {
+                "additionalProperties": false,
+                "properties": {
+                    "bank": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "base": {
+                                "type": "integer"
+                            },
+                            "length": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "chip": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "family": {
+                                "enum": [
+                                    "esp32",
+                                    "stm32"
+                                ]
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "object"
+        }
+    },
+    "required": [
+        "boards"
+    ],
+    "type": "object"
+}

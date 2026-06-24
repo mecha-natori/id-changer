@@ -19,6 +19,6 @@ export default jsxRenderer(async ({ children }) => (
                 src="/app/client.ts"
             />
         </head>
-        <body class="h-full w-full">{children}</body>
+        <body class="h-screen w-screen">{children}</body>
     </html>
 ));
