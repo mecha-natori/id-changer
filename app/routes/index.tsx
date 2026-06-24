@@ -8,12 +8,15 @@ export default createRoute(async c => {
             <h1>基板IDチェンジャー</h1>
             <p>メカトロ製基板のCANのIDを変更します。</p>
             <form
-                class="flex flex-col gap-8"
+                class="my-8 flex flex-col items-center justify-center gap-8"
                 method="post"
             >
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1">
                     <label for="board">基板:</label>
-                    <select id="board">
+                    <select
+                        class="rounded-xl px-2 py-1"
+                        id="board"
+                    >
                         {boards.map(async board => (
                             <option
                                 key={board}
@@ -25,7 +28,7 @@ export default createRoute(async c => {
                     </select>
                 </div>
                 <button
-                    class="rounded-2xl bg-(--foreground) px-12 py-4 text-(--background)"
+                    class="max-w-40 cursor-pointer rounded-4xl bg-(--foreground) px-12 py-3 text-(--background) transition-colors duration-200 hover:bg-(--hover-background) hover:text-(--hover-foreground)"
                     type="submit"
                 >
                     変更

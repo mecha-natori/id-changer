@@ -13,14 +13,16 @@
 
 @layer base {
     :root {
-        --background: oklch(100% 0 0deg);
-        --foreground: oklch(0% 0 0deg);
-        --primary: oklch(50% 0 210deg);
+        --background: oklch(95% 0 0deg);
+        --foreground: oklch(5% 0 0deg);
+        --hover-background: oklch(70% 0 0deg);
+        --hover-foreground: oklch(5% 0 0deg);
 
         @media (prefers-color-scheme: dark) {
-            --background: oklch(0% 0 0deg);
-            --foreground: oklch(100% 0 0deg);
-            --primary: oklch(50% 0 210deg);
+            --background: oklch(25% 0 0deg);
+            --foreground: oklch(95% 0 0deg);
+            --hover-background: oklch(60% 0 0deg);
+            --hover-foreground: oklch(95% 0 0deg);
 
             color-scheme: dark;
         }
