@@ -74,6 +74,7 @@
           inputs',
           lib,
           pkgs,
+          system,
           ...
         }:
         {
@@ -92,6 +93,7 @@
             pkgs.mkShell {
               __NV_DISABLE_EXPLICIT_SYNC = 1;
               LD_LIBRARY_PATH = lib.makeLibraryPath libraries;
+              RUSTFLAGS = lib.optionalString (system |> lib.hasSuffix "-linux") "-Clink-arg=-fuse-ld=mold";
               packages = builtins.concatLists [
                 config.pre-commit.settings.enabledPackages
                 (config.treefmt.build.programs |> lib.attrValues)
@@ -105,6 +107,7 @@
                   pango
                   pkg-config
                 ])
+                (lib.optional (system |> lib.hasSuffix "-linux") pkgs.mold)
                 (with inputs'.fenix.packages; [
                   (latest.withComponents [
                     "cargo"

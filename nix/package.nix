@@ -8,6 +8,7 @@
   gtk3,
   lib,
   libsoup_3,
+  mold,
   myLib,
   nodejs-slim,
   pkg-config,
@@ -15,6 +16,7 @@
   pnpmConfigHook,
   pnpmDepsHash,
   rustPlatform,
+  stdenv,
   webkitgtk_4_1,
   wrapGAppsHook3,
 }:
@@ -37,6 +39,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit (cargoToml.package) version;
+  RUSTFLAGS = lib.optionalString stdenv.buildPlatform.isLinux "-Clink-arg=-fuse-ld=mold";
   buildAndTestSubdir = finalAttrs.cargoRoot;
   buildInputs = runtimeLibraries;
   cargoLock.lockFile = ../src-tauri/Cargo.lock;
@@ -58,7 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm'
     pnpmConfigHook
     wrapGAppsHook3
-  ];
+  ]
+  ++ lib.optional stdenv.buildPlatform.isLinux mold;
   pname = cargoToml.package.name;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) patches pname src;
