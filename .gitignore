@@ -10,14 +10,12 @@
 .vite/
 .vscode/
 dist/
-gen/schemas/
 lerna-debug.log*
 logs/
 node_modules/
 npm-debug.log*
 pnpm-debug.log*
 result*
-target/
 
 !.env.example
 !.envrc

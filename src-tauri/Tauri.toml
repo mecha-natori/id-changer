@@ -1,5 +1,6 @@
 "$schema" = "https://schema.tauri.app/config/2"
 identifier = "io.github.mecha-natori.id-changer"
+mainBinaryName = "id-changer"
 productName = "CircuitIdChanger"
 
 [[app.windows]]
@@ -11,7 +12,7 @@ width = 800
 beforeBuildCommand = "pnpm build"
 beforeDevCommand = "pnpm dev"
 devUrl = "http://localhost:1420"
-frontendDist = "dist"
+frontendDist = "../dist"
 
 [bundle]
 active = true

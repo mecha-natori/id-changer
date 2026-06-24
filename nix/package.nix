@@ -37,8 +37,10 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit (cargoToml.package) version;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
   buildInputs = runtimeLibraries;
-  cargoLock.lockFile = ../Cargo.lock;
+  cargoLock.lockFile = ../src-tauri/Cargo.lock;
+  cargoRoot = "src-tauri";
   meta = {
     inherit (cargoToml.package) description;
     downloadPage = "https://github.com/mecha-natori/id-changer/releases";
