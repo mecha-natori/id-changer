@@ -18,7 +18,7 @@
             },
             "chip": {
                 "family": "stm32",
-                "name": "STM32F405RGT6"
+                "name": "STM32F405RGTx"
             }
         },
         "mecha-donald": {
@@ -28,7 +28,7 @@
             },
             "chip": {
                 "family": "stm32",
-                "name": "STM32F303ZDT6"
+                "name": "STM32F303ZDTx"
             }
         }
     }
