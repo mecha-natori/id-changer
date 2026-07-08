@@ -1,14 +1,14 @@
 {
-    "$schema": "./boards.schema.json",
+    "$schema": "boards.schema.json",
     "boards": {
         "endless-soju-party": {
             "bank": {
-                "base": -1,
-                "length": -1
+                "base": 4190208,
+                "length": 4096
             },
             "chip": {
                 "family": "esp32",
-                "name": "ESP32C3"
+                "name": "esp32c3"
             }
         },
         "heilig-vater": {

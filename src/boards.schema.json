@@ -3,7 +3,8 @@
     "additionalProperties": false,
     "properties": {
         "$schema": {
-            "const": "https://json-schema.org/draft/2020-12/schema"
+            "format": "uri",
+            "type": "string"
         },
         "boards": {
             "additionalProperties": {

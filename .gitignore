@@ -16,6 +16,7 @@ node_modules/
 npm-debug.log*
 pnpm-debug.log*
 result*
+target/
 
 !.env.example
 !.envrc

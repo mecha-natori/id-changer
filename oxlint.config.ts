@@ -1,32 +1,20 @@
-import { hono, jsx } from '@ms0503/oxc-config/lint';
+import { react } from '@ms0503/oxc-config/lint';
 import { convertGlobals } from '@ms0503/oxc-config/utils';
 import globals from 'globals';
 import { defineConfig } from 'oxlint';
 
 export default defineConfig({
-    extends: [hono, jsx],
+    extends: [react],
     ignorePatterns: [],
     options: { typeAware: true, typeCheck: true },
     overrides: [
         {
-            files: ['app/**/*.ts', 'app/**/*.tsx'],
+            files: ['src/**/*.ts', 'src/**/*.tsx'],
             globals: convertGlobals({
                 ...globals.browser,
                 ...globals.builtin,
-                ...globals.es2026,
-                ...globals.node
+                ...globals.es2026
             })
-        },
-        {
-            files: [
-                'app/routes/**/*.ts',
-                'app/routes/**/*.tsx',
-                'app/server.ts'
-            ],
-            rules: {
-                'import/no-default-export': 'off',
-                'import/no-named-default': 'off'
-            }
         },
         {
             files: ['oxfmt.config.ts', 'oxlint.config.ts', 'vite.config.ts'],

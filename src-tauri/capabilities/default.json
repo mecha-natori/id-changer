@@ -3,8 +3,7 @@
     "description": "Capability for the main window",
     "identifier": "default",
     "permissions": [
-        "core:default",
-        "opener:default"
+        "core:default"
     ],
     "windows": [
         "main"
