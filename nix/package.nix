@@ -23,7 +23,7 @@
 let
   inherit (myLib) filters;
   inherit (myLib.build) cleanSourcePipe;
-  cargoToml = ../Cargo.toml |> builtins.readFile |> builtins.fromTOML;
+  cargoToml = ../src-tauri/Cargo.toml |> builtins.readFile |> builtins.fromTOML;
   pnpm' = pnpm.override {
     inherit nodejs-slim;
   };
@@ -40,10 +40,8 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   inherit (cargoToml.package) version;
   RUSTFLAGS = lib.optionalString stdenv.buildPlatform.isLinux "-Clink-arg=-fuse-ld=mold";
-  buildAndTestSubdir = finalAttrs.cargoRoot;
   buildInputs = runtimeLibraries;
-  cargoLock.lockFile = ../src-tauri/Cargo.lock;
-  cargoRoot = "src-tauri";
+  cargoLock.lockFile = ../Cargo.lock;
   meta = {
     inherit (cargoToml.package) description;
     downloadPage = "https://github.com/mecha-natori/id-changer/releases";

@@ -1,0 +1,38 @@
+jobs:
+  build:
+    permissions:
+      contents: "read"
+    runs-on: "${{ matrix.host }}"
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v6"
+      - if: "matrix.os == 'linux'"
+        name: "Build"
+        uses: "./.github/actions/build-linux"
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - if: "matrix.os == 'macos'"
+        name: "Build"
+        uses: "./.github/actions/build-macos"
+      - if: "matrix.os == 'windows'"
+        name: "Build"
+        uses: "./.github/actions/build-windows"
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - host: "ubuntu-24.04"
+            os: "linux"
+          - host: "macos-26"
+            os: "macos"
+          - host: "windows-2025-vs2026"
+            os: "windows"
+        os:
+          - "linux"
+          - "macos"
+          - "windows"
+name: "Build"
+on:
+  pull_request:
+  push:
+  workflow_dispatch:

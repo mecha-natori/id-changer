@@ -1,0 +1,99 @@
+jobs:
+  build:
+    outputs:
+      version: >-
+        ${{
+          case(
+            matrix.os == 'linux', steps.build-linux.outputs.version,
+            matrix.os == 'macos', steps.build-macos.outputs.version,
+            matrix.os == 'windows', steps.build-windows.outputs.version,
+            null
+          )
+        }}
+    permissions:
+      contents: "read"
+    runs-on: "${{ matrix.host }}"
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v6"
+      - id: "build-linux"
+        if: "matrix.os == 'linux'"
+        name: "Build"
+        uses: "./.github/actions/build-linux"
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - id: "build-macos"
+        if: "matrix.os == 'macos'"
+        name: "Build"
+        uses: "./.github/actions/build-macos"
+      - id: "build-windows"
+        if: "matrix.os == 'windows'"
+        name: "Build"
+        uses: "./.github/actions/build-windows"
+      - name: "Upload artifact"
+        uses: "actions/upload-artifact@v7"
+        with:
+          name: "id-changer"
+          path: >-
+            ${{
+              case(
+                matrix.os == 'linux', steps.build-linux.outputs.out-path,
+                matrix.os == 'macos', steps.build-macos.outputs.out-path,
+                matrix.os == 'windows', steps.build-windows.outputs.out-path,
+                null
+              )
+            }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - host: "ubuntu-24.04"
+            os: "linux"
+          - host: "macos-26"
+            os: "macos"
+          - host: "windows-2025-vs2026"
+            os: "windows"
+        os:
+          - "linux"
+          - "macos"
+          - "windows"
+  release:
+    needs: "build"
+    permissions:
+      contents: "write"
+    runs-on: "ubuntu-24.04"
+    steps:
+      - name: "Checkout repository"
+        uses: "actions/checkout@v6"
+        with:
+          fetch-depth: 0
+      - name: "Get artifacts"
+        uses: "actions/download-artifact@v8"
+        with:
+          merge-multiple: true
+          path: "./out"
+      - name: "Configure Git"
+        run: |
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+      - id: "description"
+        name: "Prepare release description"
+        run: |
+          d=$(cat RELEASE.md)
+          d=${d//'%'/'%25'}
+          d=${d//$'\n'/'%0A'}
+          d=${d//$'\r'/'%0D'}
+          echo "description=$d" >>"$GITHUB_OUTPUT"
+      - name: "Create release"
+        uses: "svenstaro/upload-release-action@v2"
+        with:
+          body: "${{ steps.description.outputs.description }}"
+          file: "./out/*"
+          file_glob: true
+          release_name: "基板IDチェンジャー v${{ needs.build.outputs.version }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: "${{ needs.build.outputs.version }}"
+name: "Build and Release"
+on:
+  workflow_dispatch:

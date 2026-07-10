@@ -31,3 +31,6 @@ targets = [
     "msi",
     "rpm"
 ]
+
+[bundle.windows.wix]
+language = "ja-JP"

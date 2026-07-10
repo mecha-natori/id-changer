@@ -1,0 +1,229 @@
+description: "Builds the id-checker project for Linux"
+inputs:
+  token:
+    description: "GitHub Token"
+    required: true
+name: "Build for Linux"
+outputs:
+  out-path:
+    description: "Output file path"
+    value: "${{ steps.build.outputs.out-path }}"
+  version:
+    description: "App version"
+    value: "${{ steps.version.outputs.value }}"
+runs:
+  steps:
+    - name: "Remove unused tools"
+      shell: "bash"
+      run: |
+        sudo rm -rf \
+          "$AGENT_TOOLSDIRECTORY" \
+          "/etc/skel/.dotnet/tools" \
+          "/home/.dotnet/tools" \
+          "/home/.nvm" \
+          "/home/linuxbrew" \
+          "/home/perflog" \
+          "/home/work/*" \
+          "/opt/*" \
+          "/usr/bin/composer" \
+          "/usr/bin/docker-credential-ecr-login" \
+          "/usr/bin/yq" \
+          "/usr/lib/jvm" \
+          "/usr/libexec/docker/cli-plugins" \
+          "/usr/local/.ghcup" \
+          "/usr/local/aws-cli" \
+          "/usr/local/bin/.ghcup" \
+          "/usr/local/bin/aliyun" \
+          "/usr/local/bin/azcopy" \
+          "/usr/local/bin/azcopy_11.3.1" \
+          "/usr/local/bin/bicep" \
+          "/usr/local/bin/bicep" \
+          "/usr/local/bin/bicep" \
+          "/usr/local/bin/ccmake" \
+          "/usr/local/bin/cmake-gui" \
+          "/usr/local/bin/cpack" \
+          "/usr/local/bin/ctest" \
+          "/usr/local/bin/docker-compose" \
+          "/usr/local/bin/helm" \
+          "/usr/local/bin/kind" \
+          "/usr/local/bin/kubectl" \
+          "/usr/local/bin/kustomize" \
+          "/usr/local/bin/minikube" \
+          "/usr/local/bin/oc" \
+          "/usr/local/bin/oras" \
+          "/usr/local/bin/packer" \
+          "/usr/local/bin/phpunit" \
+          "/usr/local/bin/phpunit" \
+          "/usr/local/bin/pulumi" \
+          "/usr/local/bin/pulumi-analyzer-policy" \
+          "/usr/local/bin/pulumi-analyzer-policy-python" \
+          "/usr/local/bin/pulumi-language-dotnet" \
+          "/usr/local/bin/pulumi-language-go" \
+          "/usr/local/bin/pulumi-language-java" \
+          "/usr/local/bin/pulumi-language-nodejs" \
+          "/usr/local/bin/pulumi-language-python" \
+          "/usr/local/bin/pulumi-language-python-exec" \
+          "/usr/local/bin/pulumi-language-yaml" \
+          "/usr/local/bin/pulumi-resource-pulumi-nodejs" \
+          "/usr/local/bin/pulumi-resource-pulumi-python" \
+          "/usr/local/bin/pulumi-watch" \
+          "/usr/local/bin/rebar3" \
+          "/usr/local/bin/stack" \
+          "/usr/local/bin/terraform" \
+          "/usr/local/julia*" \
+          "/usr/local/lib/android" \
+          "/usr/local/lib/lein" \
+          "/usr/local/share/boost" \
+          "/usr/local/share/chromedriver-linux64" \
+          "/usr/local/share/chromium" \
+          "/usr/local/share/doc" \
+          "/usr/local/share/edge_driver" \
+          "/usr/local/share/emacs" \
+          "/usr/local/share/fonts" \
+          "/usr/local/share/gecko_driver" \
+          "/usr/local/share/icons" \
+          "/usr/local/share/man" \
+          "/usr/local/share/phantomjs*" \
+          "/usr/local/share/phantomjs-8.6" \
+          "/usr/local/share/powershell" \
+          "/usr/local/share/vcpkg" \
+          "/usr/local/sqlpackage" \
+          "/usr/share/apache-maven-3.8.8" \
+          "/usr/share/dotnet" \
+          "/usr/share/gradle-8.7" \
+          "/usr/share/kotlinc" \
+          "/usr/share/miniconda" \
+          "/usr/share/sbt" \
+          "/usr/share/swift" \
+          || true
+        sudo docker image prune --all --force
+        sudo npm uninstall bazel bazelisk || true
+        rustup self uninstall -y
+        sudo apt-get purge -y -- \
+          *-dev \
+          ansible \
+          ant \
+          ant-optional \
+          apache2 \
+          aria2 \
+          azure-cli \
+          bind9-* \
+          buildah \
+          cabal* \
+          clang* \
+          cloud-* \
+          cloud-initramfs* \
+          docker-* \
+          dotnet-sdk* \
+          firefox \
+          fonts-* \
+          gcc-10 \
+          gcc-11 \
+          gcc-11-* \
+          gcc-12 \
+          gcc-12-* \
+          gcc-9 \
+          gfortran-13 \
+          ghc* \
+          gir1.2-* \
+          golang-github-* \
+          google-chrome-stable \
+          google-cloud-cli \
+          heroku \
+          hicolor-icon-theme \
+          imagemagick-* \
+          javascript-common \
+          kubectl \
+          libfontconfig1-dev \
+          libfreetype6-dev \
+          libjs-* \
+          libllvm* \
+          liblz4-dev \
+          libmysqlclient-dev \
+          libpq-dev \
+          libpq-dev \
+          libxft-dev \
+          linux-azure-6.2-* \
+          linux-cloud-tools* \
+          linux-headers-* \
+          llvm-* \
+          man-db \
+          manpages \
+          microsoft-edge-stable \
+          moby-buildx \
+          moby-cli \
+          moby-compose \
+          moby-engine \
+          mongodb* \
+          mono-complete \
+          mssql-tools* \
+          mysql* \
+          nano \
+          nginx \
+          node* \
+          npm* \
+          nuget \
+          openjdk-11-jre-headless \
+          p7zip* \
+          packages-microsoft-prod \
+          perl \
+          php* \
+          podman \
+          postgresql* \
+          powershell \
+          python3-* \
+          r-base \
+          rpm \
+          ruby* \
+          skopeo \
+          skopeo \
+          snmp \
+          sphinxsearch \
+          subversion \
+          swig \
+          tcl \
+          tcl* \
+          temurin-* \
+          temurin-* \
+          ubuntu-advantage-tools \
+          unixodbc-dev \
+          x11-* \
+          yarn \
+          || true
+        sudo dpkg -r packages-microsoft-prod &>/dev/null || true
+        sudo apt-get autoremove -y &>/dev/null || true
+        sudo apt-get autoclean -y &>/dev/null || true
+    - name: "Install Nix"
+      uses: "cachix/install-nix-action@v31"
+      with:
+        extra_nix_config: |
+          accept-flake-config = true
+          experimental-features = flakes nix-command pipe-operators
+        github_access_token: "${{ inputs.token }}"
+        nix_path: "nixpkgs=channel:nixos-unstable"
+    - id: "product-name"
+      name: "Get product name"
+      uses: "SebRollen/toml-action@v1"
+      with:
+        field: "productName"
+        file: "src-tauri/Tauri.toml"
+    - id: "version"
+      name: "Get version"
+      uses: "SebRollen/toml-action@v1"
+      with:
+        field: "package.version"
+        file: "src-tauri/Cargo.toml"
+    - id: "build"
+      name: "Build"
+      shell: "bash"
+      run: |
+        out=$(nix build --json --no-link | jq -r '.[0].outputs.out')
+        cd "$out"
+        name="${{ steps.product-name.outputs.value }}"
+        ver="${{ steps.version.outputs.value }}"
+        fullname=${name}_${ver}_x64
+        mkdir out
+        cd "$out"
+        tar cf "$GITHUB_WORKSPACE/out/$fullname.tar.gz" ./*
+        echo "out-path=./out/$fullname.tar.gz" >>"$GITHUB_OUTPUT"
+  using: "composite"
