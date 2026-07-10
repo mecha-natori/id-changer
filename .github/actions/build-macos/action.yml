@@ -34,13 +34,13 @@ runs:
       run: "cargo fetch"
     - id: "product-name"
       name: "Get product name"
-      uses: "SebRollen/toml-action@v1"
+      uses: "SebRollen/toml-action@v1.2.0"
       with:
         field: "productName"
         file: "src-tauri/Tauri.toml"
     - id: "version"
       name: "Get version"
-      uses: "SebRollen/toml-action@v1"
+      uses: "SebRollen/toml-action@v1.2.0"
       with:
         field: "package.version"
         file: "src-tauri/Cargo.toml"
