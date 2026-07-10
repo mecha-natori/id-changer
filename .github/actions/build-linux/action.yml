@@ -217,12 +217,11 @@ runs:
       name: "Build"
       shell: "bash"
       run: |
+        mkdir out
         out=$(nix build --json --no-link | jq -r '.[0].outputs.out')
-        cd "$out"
         name="${{ steps.product-name.outputs.value }}"
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}_${ver}_x64
-        mkdir out
         cd "$out"
         tar cf "$GITHUB_WORKSPACE/out/$fullname.tar.gz" ./*
         echo "out-path=./out/$fullname.tar.gz" >>"$GITHUB_OUTPUT"
