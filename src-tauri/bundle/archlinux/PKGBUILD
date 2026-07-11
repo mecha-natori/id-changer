@@ -2,7 +2,7 @@
 
 _pkgname='mechatronicslab-circuit-id-changer'
 pkgname="${_pkgname}-git"
-# pkgver='' # auto detect from src-tauri/Cargo.toml
+pkgver='DUMMY' # auto detect from src-tauri/Cargo.toml
 pkgrel=1
 pkgdesc='Change CAN ID of circuit made by Mechatronics Lab'
 arch=('x86_64')
