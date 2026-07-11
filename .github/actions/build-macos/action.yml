@@ -43,7 +43,7 @@ runs:
       shell: "bash"
       run: |
         pnpm tauri build -b dmg -t universal-apple-darwin
-        dir=$PWD/target/release/bundle/dmg
+        dir=$PWD/target/universal-apple-darwin/release/bundle/dmg
         name="${{ steps.product-name.outputs.value }}"
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}_${ver}_universal
