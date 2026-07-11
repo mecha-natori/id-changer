@@ -48,9 +48,10 @@ runs:
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}_${ver}_amd64
         if [[ ! -f $dir/$fullname.deb ]]; then
+          file=$(find "$dir" -type f -name '*.deb')
           printf "\e[1;31mError: installer file name is wrong\e[m\n"
-          printf "  expected: \e[33m$dir/$fullname.deb\e[m\n"
-          printf "  found: \e[33m$dir/"*".deb\e[m\n"
+          printf "  expected: \e[33m%s/%s.deb\e[m\n" "$dir" "$fullname"
+          printf "  found: \e[33m%s\e[m\n" "$file"
           exit 1
         fi
         mkdir out

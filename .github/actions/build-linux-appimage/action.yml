@@ -48,9 +48,10 @@ runs:
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}_${ver}_amd64
         if [[ ! -f $dir/$fullname.AppImage ]]; then
+          file=$(find "$dir" -type f -name '*.AppImage')
           printf "\e[1;31mError: installer file name is wrong\e[m\n"
-          printf "  expected: \e[33m$dir/$fullname.AppImage\e[m\n"
-          printf "  found: \e[33m$dir/"*".AppImage\e[m\n"
+          printf "  expected: \e[33m%s/%s.AppImage\e[m\n" "$dir" "$fullname"
+          printf "  found: \e[33m%s\e[m\n" "$file"
           exit 1
         fi
         mkdir out

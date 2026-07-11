@@ -48,9 +48,10 @@ runs:
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}_${ver}_universal
         if [[ ! -f $dir/$fullname.dmg ]]; then
+          file=$(find "$dir" -type f -name '*.dmg')
           printf "\e[1;31mError: installer file name is wrong\e[m\n"
-          printf "  expected: \e[33m$dir/$fullname.dmg\e[m\n"
-          printf "  found: \e[33m$dir/"*".dmg\e[m\n"
+          printf "  expected: \e[33m%s/%s.dmg\e[m\n" "$dir" "$fullname"
+          printf "  found: \e[33m%s\e[m\n" "$file"
           exit 1
         fi
         mkdir out

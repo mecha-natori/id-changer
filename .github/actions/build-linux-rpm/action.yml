@@ -48,9 +48,10 @@ runs:
         ver="${{ steps.version.outputs.value }}"
         fullname=${name}-${ver}-1.x86_64
         if [[ ! -f $dir/$fullname.rpm ]]; then
+          file=$(find "$dir" -type f -name '*.rpm')
           printf "\e[1;31mError: installer file name is wrong\e[m\n"
-          printf "  expected: \e[33m$dir/$fullname.rpm\e[m\n"
-          printf "  found: \e[33m$dir/"*".rpm\e[m\n"
+          printf "  expected: \e[33m%s/%s.rpm\e[m\n" "$dir" "$fullname"
+          printf "  found: \e[33m%s\e[m\n" "$file"
           exit 1
         fi
         mkdir out
