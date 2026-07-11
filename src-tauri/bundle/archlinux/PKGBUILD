@@ -53,4 +53,5 @@ package() {
     cd ./id-changer || return 1
     # shellcheck disable=SC2154
     cp -a "./target/release/bundle/deb/${_pkgname}_${pkgver}_amd64/data/"* "${pkgdir}"
+    install -Dm444 LICENSE.md "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
