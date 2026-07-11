@@ -20,6 +20,7 @@ depends=(
     'webkit2gtk-4.1'
 )
 makedepends=(
+    'git'
     'go-yq'
     'nodejs'
     'pnpm'
