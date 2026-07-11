@@ -1,0 +1,29 @@
+description: "Builds the id-checker project for Archlinux"
+name: "Build for Archlinux"
+outputs:
+  out-path:
+    description: "Output file path"
+    value: "${{ steps.build.outputs.pkgfile0 }}"
+  version:
+    description: "App version"
+    value: "${{ steps.version.outputs.value }}"
+runs:
+  steps:
+    - id: "product-name"
+      name: "Get product name"
+      uses: "SebRollen/toml-action@v1.2.0"
+      with:
+        field: "productName"
+        file: "src-tauri/Tauri.toml"
+    - id: "version"
+      name: "Get version"
+      uses: "SebRollen/toml-action@v1.2.0"
+      with:
+        field: "package.version"
+        file: "src-tauri/Cargo.toml"
+    - id: "build"
+      name: "Build"
+      uses: "edlanglois/pkgbuild-action@v1"
+      with:
+        pkgdir: "src-tauri/bundle/archlinux"
+  using: "composite"

@@ -4,9 +4,20 @@ jobs:
       version: >-
         ${{
           case(
-            matrix.os == 'linux', steps.build-linux.outputs.version,
-            matrix.os == 'macos', steps.build-macos.outputs.version,
-            matrix.os == 'windows', steps.build-windows.outputs.version,
+            matrix.os == 'linux' && matrix.package == 'appimage',
+            steps.build-linux-appimage.outputs.version,
+            matrix.os == 'linux' && matrix.package == 'archlinux',
+            steps.build-linux-archlinux.outputs.version,
+            matrix.os == 'linux' && matrix.package == 'deb',
+            steps.build-linux-deb.outputs.version,
+            matrix.os == 'linux' && matrix.package == 'rpm',
+            steps.build-linux-rpm.outputs.version,
+            matrix.os == 'linux' && matrix.package == 'tgz',
+            steps.build-linux-tgz.outputs.version,
+            matrix.os == 'macos',
+            steps.build-macos.outputs.version,
+            matrix.os == 'windows',
+            steps.build-windows.outputs.version,
             null
           )
         }}
@@ -16,10 +27,26 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: "actions/checkout@v6"
-      - id: "build-linux"
-        if: "matrix.os == 'linux'"
+      - id: "build-linux-appimage"
+        if: "matrix.os == 'linux' && matrix.package == 'appimage'"
         name: "Build"
-        uses: "./.github/actions/build-linux"
+        uses: "./.github/actions/build-linux-appimage"
+      - id: "build-linux-archlinux"
+        if: "matrix.os == 'linux' && matrix.package == 'archlinux'"
+        name: "Build"
+        uses: "./.github/actions/build-linux-archlinux"
+      - id: "build-linux-deb"
+        if: "matrix.os == 'linux' && matrix.package == 'deb'"
+        name: "Build"
+        uses: "./.github/actions/build-linux-deb"
+      - id: "build-linux-rpm"
+        if: "matrix.os == 'linux' && matrix.package == 'rpm'"
+        name: "Build"
+        uses: "./.github/actions/build-linux-rpm"
+      - id: "build-linux-tgz"
+        if: "matrix.os == 'linux' && matrix.package == 'tgz'"
+        name: "Build"
+        uses: "./.github/actions/build-linux-tgz"
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
       - id: "build-macos"
@@ -37,9 +64,20 @@ jobs:
           path: >-
             ${{
               case(
-                matrix.os == 'linux', steps.build-linux.outputs.out-path,
-                matrix.os == 'macos', steps.build-macos.outputs.out-path,
-                matrix.os == 'windows', steps.build-windows.outputs.out-path,
+                matrix.os == 'linux' && matrix.package == 'appimage',
+                steps.build-linux-appimage.outputs.version,
+                matrix.os == 'linux' && matrix.package == 'archlinux',
+                steps.build-linux-archlinux.outputs.version,
+                matrix.os == 'linux' && matrix.package == 'deb',
+                steps.build-linux-deb.outputs.version,
+                matrix.os == 'linux' && matrix.package == 'rpm',
+                steps.build-linux-rpm.outputs.version,
+                matrix.os == 'linux' && matrix.package == 'tgz',
+                steps.build-linux-tgz.outputs.version,
+                matrix.os == 'macos',
+                steps.build-macos.outputs.out-path,
+                matrix.os == 'windows',
+                steps.build-windows.outputs.out-path,
                 null
               )
             }}
@@ -49,6 +87,19 @@ jobs:
         include:
           - host: "ubuntu-24.04"
             os: "linux"
+            package: "appimage"
+          - host: "ubuntu-24.04"
+            os: "linux"
+            package: "archlinux"
+          - host: "ubuntu-24.04"
+            os: "linux"
+            package: "deb"
+          - host: "ubuntu-24.04"
+            os: "linux"
+            package: "rpm"
+          - host: "ubuntu-24.04"
+            os: "linux"
+            package: "tgz"
           - host: "macos-26"
             os: "macos"
           - host: "windows-2025-vs2026"

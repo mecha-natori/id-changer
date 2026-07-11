@@ -1,0 +1,55 @@
+# shellcheck disable=SC2034
+
+_pkgname='mechatronicslab-circuit-id-changer'
+pkgname="${_pkgname}-git"
+# pkgver='' # auto detect from src-tauri/Cargo.toml
+pkgrel=1
+pkgdesc='Change CAN ID of circuit made by Mechatronics Lab'
+arch=('x86_64')
+url='https://github.com/mecha-natori/id-changer'
+license=('MIT')
+depends=(
+    'cairo'
+    'desktop-file-utils'
+    'gdk-pixbuf2'
+    'glib2'
+    'gtk3'
+    'hicolor-icon-theme'
+    'libsoup'
+    'pango'
+    'webkit2gtk-4.1'
+)
+makedepends=(
+    'go-yq'
+    'nodejs'
+    'pnpm'
+    'rustup'
+)
+options=(
+    '!emptydirs'
+    '!strip'
+)
+source=("git+${url}.git")
+b2sums=('SKIP')
+
+pkgver() {
+    cd ./id-changer || return 1
+    printf "%s" "$(yq '.package.version' ./src-tauri/Cargo.toml)"
+}
+
+prepare() {
+    cd ./id-changer || return 1
+    rustup toolchain install nightly --profile minimal
+    pnpm ci
+}
+
+build() {
+    cd ./id-changer || return 1
+    pnpm tauri build -b deb
+}
+
+package() {
+    cd ./id-changer || return 1
+    # shellcheck disable=SC2154
+    cp -a "./target/release/bundle/deb/${_pkgname}_${pkgver}_amd64/data/"* "${pkgdir}"
+}

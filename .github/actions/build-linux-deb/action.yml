@@ -1,5 +1,5 @@
-description: "Builds the id-checker project for macOS (Universal)"
-name: "Build for macOS"
+description: "Builds the id-checker project for Debian GNU/Linux family"
+name: "Build for Debian GNU/Linux family"
 outputs:
   out-path:
     description: "Output file path"
@@ -19,7 +19,7 @@ runs:
     - name: "Setup latest Rust toolchain"
       uses: "dtolnay/rust-toolchain@nightly"
       with:
-        targets: "aarch64-apple-darwin,x86_64-apple-darwin"
+        targets: "x86_64-unknown-linux-gnu"
     - name: "Install frontend dependencies"
       shell: "bash"
       run: "pnpm ci"
@@ -42,18 +42,18 @@ runs:
       name: "Build"
       shell: "bash"
       run: |
-        pnpm tauri build -b dmg -t universal-apple-darwin
-        dir=$PWD/target/release/bundle/dmg
+        pnpm tauri build -b deb
+        dir=$PWD/target/release/bundle/deb
         name="${{ steps.product-name.outputs.value }}"
         ver="${{ steps.version.outputs.value }}"
-        fullname=${name}_${ver}_universal
-        if [[ ! -f $dir/$fullname.dmg ]]; then
+        fullname=${name}_${ver}_amd64
+        if [[ ! -f $dir/$fullname.deb ]]; then
           printf "\e[1;31mError: installer file name is wrong\e[m\n"
-          printf "  expected: \e[33m$dir/$fullname.dmg\e[m\n"
-          printf "  found: \e[33m$dir/"*".dmg\e[m\n"
+          printf "  expected: \e[33m$dir/$fullname.deb\e[m\n"
+          printf "  found: \e[33m$dir/"*".deb\e[m\n"
           exit 1
         fi
         mkdir out
-        mv "$dir/$fullname.dmg" "$GITHUB_WORKSPACE/out/$fullname.dmg"
-        echo "out-path=./out/$fullname.dmg" >>"$GITHUB_OUTPUT"
+        mv "$dir/$fullname.deb" "$GITHUB_WORKSPACE/out/$fullname.deb"
+        echo "out-path=./out/$fullname.deb" >>"$GITHUB_OUTPUT"
   using: "composite"

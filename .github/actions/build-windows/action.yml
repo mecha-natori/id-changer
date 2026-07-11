@@ -1,8 +1,4 @@
 description: "Builds the id-checker project for Windows"
-inputs:
-  token:
-    description: "GitHub Token (unused)"
-    required: false
 name: "Build for Windows"
 outputs:
   out-path:
@@ -46,7 +42,7 @@ runs:
       name: "Build"
       shell: "bash"
       run: |
-        pnpm tauri build
+        pnpm tauri build -b msi
         dir=$PWD/target/release/bundle/msi
         name="${{ steps.product-name.outputs.value }}"
         ver="${{ steps.version.outputs.value }}"
