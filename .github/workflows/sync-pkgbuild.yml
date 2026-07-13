@@ -82,7 +82,7 @@ jobs:
           ver="${{ needs.check.outputs.version }}"
           cd ./src-tauri/bundle/archlinux
           sed -i 's/^pkgver=[^ ]\+/pkgver="'"$ver"'"/' PKGBUILD
-          makepkg --printsrcinfo >.SRCINFO
+          makepkg --config ./makepkg.conf --printsrcinfo >.SRCINFO
           git add PKGBUILD .SRCINFO
           git commit -m "chore: ArchLinux向けパッケージ定義を更新"
           git push origin "refs/heads/$BRANCH"
