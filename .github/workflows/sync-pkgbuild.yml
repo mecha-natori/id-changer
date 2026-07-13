@@ -9,44 +9,13 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: "actions/checkout@v6"
-      - name: "Install makepkg"
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            --no-install-recommends \
-            --no-install-suggests \
-            makepkg
-      - name: "Install yq"
-        run: "go install github.com/mikefarah/yq/v4@latest"
       - id: "check"
         name: "Check"
-        run: |
-          sync_needed=false
-          expected=$(yq .package.version ./src-tauri/Cargo.toml)
-          pkgbuild=$(
-            grep pkgver= ./src-tauri/bundle/archlinux/PKGBUILD \
-            | sed 's/^pkgver=['\''"]\?\([^'\''"]\+\)['\''"]\?/\1/' \
-            | cut -f1 -d' '
-          )
-          srcinfo=$(
-            grep pkgver ./src-tauri/bundle/archlinux/.SRCINFO \
-            | sed 's/^	pkgver = //'
-          )
-          if [[ $expected != "$pkgbuild" ]] \
-            || [[ $expected != "$srcinfo" ]]
-          then
-            sync_needed=true
-          fi
-          cd ./src-tauri/bundle/archlinux
-          if ! diff \
-            .SRCINFO \
-            <(makepkg --config ./makepkg.conf --printsrcinfo) \
-            &>/dev/null
-          then
-            sync_needed=true
-          fi
-          echo "sync-needed=$sync_needed" >>"$GITHUB_OUTPUT"
-          echo "version=$expected" >>"$GITHUB_OUTPUT"
+        uses: "./.github/actions/check-pkgbuild"
+        with:
+          cargoToml: "src-tauri/Cargo.toml"
+          makepkgConf: "src-tauri/bundle/archlinux/makepkg.conf"
+          pkgdir: "src-tauri/bundle/archlinux"
   sync:
     if: "fromJSON(needs.check.outputs.sync-needed)"
     needs: "check"
@@ -63,13 +32,16 @@ jobs:
           git config user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-      - name: "Install makepkg"
+      - name: "Sync"
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            --no-install-recommends \
-            --no-install-suggests \
-            makepkg
+          ver="${{ needs.check.outputs.version }}"
+          cd ./src-tauri/bundle/archlinux
+          sed -i 's/^pkgver=[^ ]\+/pkgver='\'"$ver"\''/' PKGBUILD
+      - name: "Generate .SRCINFO"
+        uses: "./.github/actions/generate-srcinfo"
+        with:
+          makepkgConf: "src-tauri/bundle/archlinux/makepkg.conf"
+          pkgdir: "src-tauri/bundle/archlinux"
       - env:
           BRANCH: >-
             ${{
@@ -77,13 +49,9 @@ jobs:
               && github.head_ref
               || github.ref_name
             }}
-        name: "Sync"
+        name: "Push"
         run: |
-          ver="${{ needs.check.outputs.version }}"
-          cd ./src-tauri/bundle/archlinux
-          sed -i 's/^pkgver=[^ ]\+/pkgver="'"$ver"'"/' PKGBUILD
-          makepkg --config ./makepkg.conf --printsrcinfo >.SRCINFO
-          git add PKGBUILD .SRCINFO
+          git add ./src-tauri/bundle/archlinux/{PKGBUILD,.SRCINFO}
           git commit -m "chore: ArchLinux向けパッケージ定義を更新"
           git push origin "refs/heads/$BRANCH"
 name: "Sync PKGBUILD"
