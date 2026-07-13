@@ -25,7 +25,7 @@ jobs:
           expected=$(yq .package.version ./src-tauri/Cargo.toml)
           pkgbuild=$(
             grep pkgver= ./src-tauri/bundle/archlinux/PKGBUILD \
-            | sed 's/^pkgver=//' \
+            | sed 's/^pkgver=['\''"]\?\([^'\''"]\+\)['\''"]\?/\1/' \
             | cut -f1 -d' '
           )
           srcinfo=$(
