@@ -33,17 +33,22 @@ jobs:
             | sed 's/^	pkgver = //'
           )
           if [[ $expected != "$pkgbuild" ]] \
-          || [[ $expected != "$srcinfo" ]]; then
+            || [[ $expected != "$srcinfo" ]]
+          then
             sync_needed=true
           fi
           cd ./src-tauri/bundle/archlinux
-          if ! diff .SRCINFO <(makepkg --printsrcinfo) &>/dev/null; then
+          if ! diff \
+            .SRCINFO \
+            <(makepkg --config ./makepkg.conf --printsrcinfo) \
+            &>/dev/null
+          then
             sync_needed=true
           fi
           echo "sync-needed=$sync_needed" >>"$GITHUB_OUTPUT"
           echo "version=$expected" >>"$GITHUB_OUTPUT"
   sync:
-    if: "needs.check.outputs.sync-needed"
+    if: "fromJSON(needs.check.outputs.sync-needed)"
     needs: "check"
     permissions:
       contents: "write"

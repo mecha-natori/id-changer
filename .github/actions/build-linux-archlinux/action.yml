@@ -25,5 +25,6 @@ runs:
       name: "Build"
       uses: "edlanglois/pkgbuild-action@v1"
       with:
+        makepkgArgs: "src-tauri/bundle/archlinux/makepkg.conf"
         pkgdir: "src-tauri/bundle/archlinux"
   using: "composite"
