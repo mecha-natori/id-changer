@@ -16,49 +16,6 @@ name: "Build for ArchLinux"
 outputs:
   version:
     description: "App version"
-    value: "${{ steps.version.outputs.value }}"
 runs:
-  steps:
-    - env:
-        GPG_PRIVATE_KEY: "${{ inputs.gpg-private-key }}"
-        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
-        GPG_SIGN_KEY_KEYGRIP: "${{ inputs.gpg-sign-key-keygrip }}"
-      name: "Import GPG key"
-      shell: "bash"
-      run: |
-        gpg \
-          --batch \
-          --import \
-          --no-tty \
-          --passphrase-fd 3 \
-          --pinentry-mode loopback \
-          --yes \
-          <<<"$GPG_PRIVATE_KEY" \
-          3<<<"$GPG_PRIVATE_KEY_PASSPHRASE"
-        printf "allow-preset-passphrase\n" >>"$HOME/.gnupg/gpg-agent.conf"
-        gpgconf --kill gpg-agent
-        gpg-connect-agent /bye >/dev/null
-        printf "%s\n" "$GPG_PRIVATE_KEY_PASSPHRASE" \
-        | /usr/lib/gnupg/gpg-preset-passphrase --preset "$GPG_SIGN_KEY_KEYGRIP"
-    - id: "product-name"
-      name: "Get product name"
-      uses: "SebRollen/toml-action@v1.2.0"
-      with:
-        field: "productName"
-        file: "src-tauri/Tauri.toml"
-    - id: "version"
-      name: "Get version"
-      uses: "SebRollen/toml-action@v1.2.0"
-      with:
-        field: "package.version"
-        file: "src-tauri/Cargo.toml"
-    - id: "build"
-      name: "Build"
-      uses: "edlanglois/pkgbuild-action@v1"
-      with:
-        makepkgArgs: >-
-          --config makepkg.conf
-          --key '${{ inputs.gpg-sign-key }}!'
-          --sign
-        pkgdir: "src-tauri/bundle/archlinux"
-  using: "composite"
+  image: "Dockerfile"
+  using: "docker"
