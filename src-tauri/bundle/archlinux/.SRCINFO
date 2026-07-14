@@ -7,6 +7,7 @@ pkgbase = mechatronicslab-circuit-id-changer-git
 	license = MIT
 	makedepends = git
 	makedepends = go-yq
+	makedepends = mold
 	makedepends = nodejs
 	makedepends = pnpm
 	makedepends = rustup
