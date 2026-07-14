@@ -51,9 +51,19 @@ jobs:
       - if: "matrix.os == 'macos'"
         name: "Build"
         uses: "./.github/actions/build-macos"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
       - if: "matrix.os == 'windows'"
         name: "Build"
         uses: "./.github/actions/build-windows"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
     strategy:
       fail-fast: false
       matrix:
