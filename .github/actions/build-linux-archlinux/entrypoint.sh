@@ -22,12 +22,11 @@ sudo -u builder /usr/lib/gnupg/gpg-preset-passphrase \
     "$INPUT_GPG_SIGN_KEY_KEYGRIP"
 BASE_DIR=$PWD
 tmpdir=$(mktemp -d)
-mpcfg=$tmpdir/${INPUT_MAKEPKGCONF:-makepkg.conf}
-cp -r "${INPUT_PKGDIR:-.}/"* "$tmpdir"
+cp -r ./src-tauri/bundle/archlinux/* "$tmpdir"
 chown -R builder "$tmpdir"
 cd "$tmpdir"
 sudo -u builder makepkg \
-    --config "$mpcfg" \
+    --config makepkg.conf \
     --key "$INPUT_GPG_SIGN_KEY!" \
     --sign \
     --syncdeps
