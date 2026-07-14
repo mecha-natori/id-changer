@@ -17,8 +17,9 @@ sudo -u builder bash -c \
 sudo -u builder gpgconf --kill gpg-agent
 sudo -u builder gpg-connect-agent /bye >/dev/null
 sudo -u builder /usr/lib/gnupg/gpg-preset-passphrase \
-    --preset "$INPUT_GPG_SIGN_KEY_KEYGRIP" \
-    -P "$INPUT_GPG_PRIVATE_KEY_PASSPHRASE"
+    --preset \
+    -P "$INPUT_GPG_PRIVATE_KEY_PASSPHRASE" \
+    "$INPUT_GPG_SIGN_KEY_KEYGRIP"
 BASE_DIR=$PWD
 tmpdir=$(mktemp -d)
 mpcfg=$tmpdir/${INPUT_MAKEPKGCONF:-makepkg.conf}
