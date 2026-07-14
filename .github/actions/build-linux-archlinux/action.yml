@@ -1,4 +1,4 @@
-description: "Builds the id-checker project for Archlinux"
+description: "Builds the id-checker project for ArchLinux"
 inputs:
   gpg-private-key:
     description: "GPG private key for signing"
@@ -12,7 +12,7 @@ inputs:
   gpg-sign-key-keygrip:
     description: "Keygrip of GPG key for signing"
     required: true
-name: "Build for Archlinux"
+name: "Build for ArchLinux"
 outputs:
   out-path:
     description: "Output file path"
