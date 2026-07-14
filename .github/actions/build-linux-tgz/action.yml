@@ -14,9 +14,6 @@ inputs:
     required: true
 name: "Build for Linux"
 outputs:
-  out-path:
-    description: "Output file path"
-    value: "${{ steps.build.outputs.out-path }}"
   version:
     description: "App version"
     value: "${{ steps.version.outputs.value }}"
@@ -262,5 +259,4 @@ runs:
           --yes \
           "$GITHUB_WORKSPACE/out/$fullname.tar.gz" \
           <<<"$GPG_PRIVATE_KEY_PASSPHRASE"
-        echo "out-path=./out/$fullname.tar.gz" >>"$GITHUB_OUTPUT"
   using: "composite"

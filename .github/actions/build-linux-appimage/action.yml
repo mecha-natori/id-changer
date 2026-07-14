@@ -11,9 +11,6 @@ inputs:
     required: true
 name: "Build for Linux AppImage"
 outputs:
-  out-path:
-    description: "Output file path"
-    value: "${{ steps.build.outputs.out-path }}"
   version:
     description: "App version"
     value: "${{ steps.version.outputs.value }}"
@@ -98,5 +95,4 @@ runs:
         fi
         mkdir out
         mv "$dir/$fullname.AppImage" "$GITHUB_WORKSPACE/out/$fullname.AppImage"
-        echo "out-path=./out/$fullname.AppImage" >>"$GITHUB_OUTPUT"
   using: "composite"

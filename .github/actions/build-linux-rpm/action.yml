@@ -8,9 +8,6 @@ inputs:
     required: true
 name: "Build for RedHat Enterprise Linux family"
 outputs:
-  out-path:
-    description: "Output file path"
-    value: "${{ steps.build.outputs.out-path }}"
   version:
     description: "App version"
     value: "${{ steps.version.outputs.value }}"
@@ -78,5 +75,4 @@ runs:
         fi
         mkdir out
         mv "$dir/$fullname.rpm" "$GITHUB_WORKSPACE/out/$fullname.rpm"
-        echo "out-path=./out/$fullname.rpm" >>"$GITHUB_OUTPUT"
   using: "composite"

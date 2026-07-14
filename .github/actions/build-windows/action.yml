@@ -1,9 +1,6 @@
 description: "Builds the id-checker project for Windows"
 name: "Build for Windows"
 outputs:
-  out-path:
-    description: "Output file path"
-    value: "${{ steps.build.outputs.out-path }}"
   version:
     description: "App version"
     value: "${{ steps.version.outputs.value }}"
@@ -56,5 +53,4 @@ runs:
         fi
         mkdir out
         mv "$dir/$fullname.msi" "$GITHUB_WORKSPACE/out/$fullname.msi"
-        echo "out-path=./out/$fullname.msi" >>"$GITHUB_OUTPUT"
   using: "composite"

@@ -11,9 +11,6 @@ inputs:
     required: true
 name: "Build for Debian GNU/Linux family"
 outputs:
-  out-path:
-    description: "Output file path"
-    value: "${{ steps.build.outputs.out-path }}"
   version:
     description: "App version"
     value: "${{ steps.version.outputs.value }}"
@@ -96,5 +93,4 @@ runs:
         dpkg-sig --sign builder -k "$GPG_SIGN_KEY" "$dir/$fullname.deb"
         mkdir out
         mv "$dir/$fullname.deb" "$GITHUB_WORKSPACE/out/$fullname.deb"
-        echo "out-path=./out/$fullname.deb" >>"$GITHUB_OUTPUT"
   using: "composite"
