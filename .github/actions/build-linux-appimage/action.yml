@@ -9,6 +9,21 @@ outputs:
     value: "${{ steps.version.outputs.value }}"
 runs:
   steps:
+    - env:
+        GPG_PRIVATE_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}"
+      name: "Import GPG key"
+      shell: "bash"
+      run: |
+        gpg \
+          --batch \
+          --import \
+          --no-tty \
+          --passphrase-fd 3 \
+          --pinentry-mode loopback \
+          --yes \
+          <<<"$GPG_PRIVATE_KEY" \
+          3<<<"$GPG_PRIVATE_KEY_PASSPHRASE"
     - name: "Install Tauri dependencies"
       shell: "bash"
       run: |
@@ -47,7 +62,13 @@ runs:
       with:
         field: "package.version"
         file: "src-tauri/Cargo.toml"
-    - id: "build"
+    - env:
+        APPIMAGETOOL_FORCE_SIGN: "1"
+        APPIMAGETOOL_SIGN_PASSPHRASE: >-
+          ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+        SIGN: "1"
+        SIGN_KEY: "${{ vars.GPG_SIGN_KEY }}"
+      id: "build"
       name: "Build"
       shell: "bash"
       run: |

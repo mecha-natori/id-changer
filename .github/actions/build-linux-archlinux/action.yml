@@ -9,6 +9,27 @@ outputs:
     value: "${{ steps.version.outputs.value }}"
 runs:
   steps:
+    - env:
+        GPG_PRIVATE_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}"
+        GPG_SIGN_KEY_KEYGRIP: "${{ vars.GPG_SIGN_KEY_KEYGRIP }}"
+      name: "Import GPG key"
+      shell: "bash"
+      run: |
+        gpg \
+          --batch \
+          --import \
+          --no-tty \
+          --passphrase-fd 3 \
+          --pinentry-mode loopback \
+          --yes \
+          <<<"$GPG_PRIVATE_KEY" \
+          3<<<"$GPG_PRIVATE_KEY_PASSPHRASE"
+        printf "allow-preset-passphrase\n" >>"$HOME/.gnupg/gpg-agent.conf"
+        gpgconf --kill gpg-agent
+        gpg-connect-agent /bye >/dev/null
+        printf "%s\n" "$GPG_PRIVATE_KEY_PASSPHRASE" \
+        | /usr/lib/gnupg/gpg-preset-passphrase --preset "$GPG_SIGN_KEY_KEYGRIP"
     - id: "product-name"
       name: "Get product name"
       uses: "SebRollen/toml-action@v1.2.0"
@@ -25,6 +46,9 @@ runs:
       name: "Build"
       uses: "edlanglois/pkgbuild-action@v1"
       with:
-        makepkgArgs: "src-tauri/bundle/archlinux/makepkg.conf"
+        makepkgArgs: >-
+          --config makepkg.conf
+          --key "${{ vars.GPG_SIGN_KEY }}"
+          --sign
         pkgdir: "src-tauri/bundle/archlinux"
   using: "composite"

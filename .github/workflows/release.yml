@@ -60,27 +60,8 @@ jobs:
       - name: "Upload artifact"
         uses: "actions/upload-artifact@v7"
         with:
-          name: "id-changer"
-          path: >-
-            ${{
-              case(
-                matrix.os == 'linux-appimage',
-                steps.build-linux-appimage.outputs.version,
-                matrix.os == 'linux-archlinux',
-                steps.build-linux-archlinux.outputs.version,
-                matrix.os == 'linux-deb',
-                steps.build-linux-deb.outputs.version,
-                matrix.os == 'linux-rpm',
-                steps.build-linux-rpm.outputs.version,
-                matrix.os == 'linux-tgz',
-                steps.build-linux-tgz.outputs.version,
-                matrix.os == 'macos',
-                steps.build-macos.outputs.out-path,
-                matrix.os == 'windows',
-                steps.build-windows.outputs.out-path,
-                null
-              )
-            }}
+          name: "id-changer-${{ matrix.os }}"
+          path: "./out/"
     strategy:
       fail-fast: false
       matrix:
@@ -122,6 +103,7 @@ jobs:
         with:
           merge-multiple: true
           path: "./out"
+          pattern: "id-changer-*"
       - name: "Configure Git"
         run: |
           git config user.email \

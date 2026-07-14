@@ -47,7 +47,11 @@ runs:
       with:
         field: "package.version"
         file: "src-tauri/Cargo.toml"
-    - id: "build"
+    - env:
+        TAURI_SIGNING_RPM_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+        TAURI_SIGNING_RPM_KEY_PASSPHRASE: >-
+          ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+      id: "build"
       name: "Build"
       shell: "bash"
       run: |
