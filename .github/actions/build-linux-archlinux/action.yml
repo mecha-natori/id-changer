@@ -1,15 +1,15 @@
 description: "Builds the id-checker project for ArchLinux"
 inputs:
-  gpg-private-key:
+  gpg_private_key:
     description: "GPG private key for signing"
     required: true
-  gpg-private-key-passphrase:
+  gpg_private_key_passphrase:
     description: "Passphrase of GPG private key for signing"
     required: true
-  gpg-sign-key:
+  gpg_sign_key:
     description: "GPG key id for signing"
     required: true
-  gpg-sign-key-keygrip:
+  gpg_sign_key_keygrip:
     description: "Keygrip of GPG key for signing"
     required: true
 name: "Build for ArchLinux"

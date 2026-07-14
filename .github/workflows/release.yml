@@ -41,11 +41,11 @@ jobs:
         name: "Build"
         uses: "./.github/actions/build-linux-archlinux"
         with:
-          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
-          gpg-private-key-passphrase: >-
+          gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg_private_key_passphrase: >-
             ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
-          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
-          gpg-sign-key-keygrip: "${{ vars.GPG_SIGN_KEY_KEYGRIP }}"
+          gpg_sign_key: "${{ vars.GPG_SIGN_KEY }}"
+          gpg_sign_key_keygrip: "${{ vars.GPG_SIGN_KEY_KEYGRIP }}"
       - id: "build-linux-deb"
         if: "matrix.os == 'linux-deb'"
         name: "Build"
