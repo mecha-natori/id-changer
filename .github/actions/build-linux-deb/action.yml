@@ -36,7 +36,6 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y --no-install-recommends --no-install-suggests \
-          dpkg-sig \
           libappindicator3-dev \
           libgtk-3-dev \
           librsvg2-dev \
@@ -72,6 +71,7 @@ runs:
         field: "package.version"
         file: "src-tauri/Cargo.toml"
     - env:
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
         GPG_SIGN_KEY: "${{ inputs.gpg-sign-key }}"
         RUSTFLAGS: "-Clink-arg=-fuse-ld=mold"
       id: "build"
@@ -90,7 +90,17 @@ runs:
           printf "  found: \e[33m%s\e[m\n" "$file"
           exit 1
         fi
-        dpkg-sig --sign builder -k "$GPG_SIGN_KEY" "$dir/$fullname.deb"
         mkdir out
         mv "$dir/$fullname.deb" "$GITHUB_WORKSPACE/out/$fullname.deb"
+        gpg \
+          --batch \
+          --detach-sign \
+          --local-user "$GPG_SIGN_KEY" \
+          --no-tty \
+          --output "$GITHUB_WORKSPACE/out/$fullname.deb.sig" \
+          --passphrase-fd 0 \
+          --pinentry-mode loopback \
+          --yes \
+          "$GITHUB_WORKSPACE/out/$fullname.deb" \
+          <<<"$GPG_PRIVATE_KEY_PASSPHRASE"
   using: "composite"
