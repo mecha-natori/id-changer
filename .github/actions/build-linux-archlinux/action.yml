@@ -48,7 +48,7 @@ runs:
       with:
         makepkgArgs: >-
           --config makepkg.conf
-          --key "${{ vars.GPG_SIGN_KEY }}"
+          --key '${{ vars.GPG_SIGN_KEY }}!'
           --sign
         pkgdir: "src-tauri/bundle/archlinux"
   using: "composite"
