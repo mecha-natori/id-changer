@@ -1,4 +1,11 @@
 description: "Builds the id-checker project for RedHat Enterprise Linux family"
+inputs:
+  gpg-private-key:
+    description: "GPG private key for signing"
+    required: true
+  gpg-private-key-passphrase:
+    description: "Passphrase of GPG private key for signing"
+    required: true
 name: "Build for RedHat Enterprise Linux family"
 outputs:
   out-path:
@@ -50,9 +57,9 @@ runs:
         file: "src-tauri/Cargo.toml"
     - env:
         RUSTFLAGS: "-Clink-arg=-fuse-ld=mold"
-        TAURI_SIGNING_RPM_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
+        TAURI_SIGNING_RPM_KEY: "${{ inputs.gpg-private-key }}"
         TAURI_SIGNING_RPM_KEY_PASSPHRASE: >-
-          ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          ${{ inputs.gpg-private-key-passphrase }}
       id: "build"
       name: "Build"
       shell: "bash"

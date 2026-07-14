@@ -31,23 +31,47 @@ jobs:
         if: "matrix.os == 'linux-appimage'"
         name: "Build"
         uses: "./.github/actions/build-linux-appimage"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
       - id: "build-linux-archlinux"
         if: "matrix.os == 'linux-archlinux'"
         name: "Build"
         uses: "./.github/actions/build-linux-archlinux"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
+          gpg-sign-key-keygrip: "${{ vars.GPG_SIGN_KEY_KEYGRIP }}"
       - id: "build-linux-deb"
         if: "matrix.os == 'linux-deb'"
         name: "Build"
         uses: "./.github/actions/build-linux-deb"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
       - id: "build-linux-rpm"
         if: "matrix.os == 'linux-rpm'"
         name: "Build"
         uses: "./.github/actions/build-linux-rpm"
+        with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
       - id: "build-linux-tgz"
         if: "matrix.os == 'linux-tgz'"
         name: "Build"
         uses: "./.github/actions/build-linux-tgz"
         with:
+          gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+          gpg-private-key-passphrase: >-
+            ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - id: "build-macos"
         if: "matrix.os == 'macos'"

@@ -1,4 +1,14 @@
 description: "Builds the id-checker project for Linux AppImage"
+inputs:
+  gpg-private-key:
+    description: "GPG private key for signing"
+    required: true
+  gpg-private-key-passphrase:
+    description: "Passphrase of GPG private key for signing"
+    required: true
+  gpg-sign-key:
+    description: "GPG key id for signing"
+    required: true
 name: "Build for Linux AppImage"
 outputs:
   out-path:
@@ -10,8 +20,8 @@ outputs:
 runs:
   steps:
     - env:
-        GPG_PRIVATE_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
-        GPG_PRIVATE_KEY_PASSPHRASE: "${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}"
+        GPG_PRIVATE_KEY: "${{ inputs.gpg-private-key }}"
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
       name: "Import GPG key"
       shell: "bash"
       run: |
@@ -66,10 +76,10 @@ runs:
     - env:
         APPIMAGETOOL_FORCE_SIGN: "1"
         APPIMAGETOOL_SIGN_PASSPHRASE: >-
-          ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          ${{ inputs.gpg-private-key-passphrase }}
         RUSTFLAGS: "-Clink-arg=-fuse-ld=mold"
         SIGN: "1"
-        SIGN_KEY: "${{ vars.GPG_SIGN_KEY }}"
+        SIGN_KEY: "${{ inputs.gpg-sign-key }}"
       id: "build"
       name: "Build"
       shell: "bash"

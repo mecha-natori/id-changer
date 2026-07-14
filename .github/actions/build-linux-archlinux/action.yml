@@ -1,4 +1,17 @@
 description: "Builds the id-checker project for Archlinux"
+inputs:
+  gpg-private-key:
+    description: "GPG private key for signing"
+    required: true
+  gpg-private-key-passphrase:
+    description: "Passphrase of GPG private key for signing"
+    required: true
+  gpg-sign-key:
+    description: "GPG key id for signing"
+    required: true
+  gpg-sign-key-keygrip:
+    description: "Keygrip of GPG key for signing"
+    required: true
 name: "Build for Archlinux"
 outputs:
   out-path:
@@ -10,9 +23,9 @@ outputs:
 runs:
   steps:
     - env:
-        GPG_PRIVATE_KEY: "${{ secrets.GPG_PRIVATE_KEY }}"
-        GPG_PRIVATE_KEY_PASSPHRASE: "${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}"
-        GPG_SIGN_KEY_KEYGRIP: "${{ vars.GPG_SIGN_KEY_KEYGRIP }}"
+        GPG_PRIVATE_KEY: "${{ inputs.gpg-private-key }}"
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
+        GPG_SIGN_KEY_KEYGRIP: "${{ inputs.gpg-sign-key-keygrip }}"
       name: "Import GPG key"
       shell: "bash"
       run: |
@@ -48,7 +61,7 @@ runs:
       with:
         makepkgArgs: >-
           --config makepkg.conf
-          --key '${{ vars.GPG_SIGN_KEY }}!'
+          --key '${{ inputs.gpg-sign-key }}!'
           --sign
         pkgdir: "src-tauri/bundle/archlinux"
   using: "composite"
