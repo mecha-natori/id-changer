@@ -28,6 +28,7 @@ cd "$tmpdir"
 sudo -u builder makepkg \
     --config makepkg.conf \
     --key "$INPUT_GPG_SIGN_KEY!" \
+    --noconfirm \
     --sign \
     --syncdeps
 mkdir "$BASE_DIR/out"
