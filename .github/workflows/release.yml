@@ -63,6 +63,7 @@ jobs:
           gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
           gpg-private-key-passphrase: >-
             ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+          gpg-sign-key: "${{ vars.GPG_SIGN_KEY }}"
       - id: "build-linux-tgz"
         if: "matrix.os == 'linux-tgz'"
         name: "Build"

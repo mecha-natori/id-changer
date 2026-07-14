@@ -6,6 +6,9 @@ inputs:
   gpg-private-key-passphrase:
     description: "Passphrase of GPG private key for signing"
     required: true
+  gpg-sign-key:
+    description: "GPG key id for signing"
+    required: true
 name: "Build for RedHat Enterprise Linux family"
 outputs:
   version:
@@ -13,6 +16,21 @@ outputs:
     value: "${{ steps.version.outputs.value }}"
 runs:
   steps:
+    - env:
+        GPG_PRIVATE_KEY: "${{ inputs.gpg-private-key }}"
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
+      name: "Import GPG key"
+      shell: "bash"
+      run: |
+        gpg \
+          --batch \
+          --import \
+          --no-tty \
+          --passphrase-fd 3 \
+          --pinentry-mode loopback \
+          --yes \
+          <<<"$GPG_PRIVATE_KEY" \
+          3<<<"$GPG_PRIVATE_KEY_PASSPHRASE"
     - name: "Install Tauri dependencies"
       shell: "bash"
       run: |
@@ -53,10 +71,9 @@ runs:
         field: "package.version"
         file: "src-tauri/Cargo.toml"
     - env:
+        GPG_PRIVATE_KEY_PASSPHRASE: "${{ inputs.gpg-private-key-passphrase }}"
+        GPG_SIGN_KEY: "${{ inputs.gpg-sign-key }}"
         RUSTFLAGS: "-Clink-arg=-fuse-ld=mold"
-        TAURI_SIGNING_RPM_KEY: "${{ inputs.gpg-private-key }}"
-        TAURI_SIGNING_RPM_KEY_PASSPHRASE: >-
-          ${{ inputs.gpg-private-key-passphrase }}
       id: "build"
       name: "Build"
       shell: "bash"
@@ -75,4 +92,15 @@ runs:
         fi
         mkdir out
         mv "$dir/$fullname.rpm" "$GITHUB_WORKSPACE/out/$fullname.rpm"
+        gpg \
+          --batch \
+          --detach-sign \
+          --local-user "$GPG_SIGN_KEY" \
+          --no-tty \
+          --output "$GITHUB_WORKSPACE/out/$fullname.rpm.sig" \
+          --passphrase-fd 0 \
+          --pinentry-mode loopback \
+          --yes \
+          "$GITHUB_WORKSPACE/out/$fullname.rpm" \
+          <<<"$GPG_PRIVATE_KEY_PASSPHRASE"
   using: "composite"
